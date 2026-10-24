@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15M in 8 Months - Jurnal Tabungan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        journal: {
+                            bg: '#FAF8F5',
+                            card: '#FFFFFF',
+                            navy: '#1E293B',
+                            subtext: '#64748B',
+                            lavender: '#E9D5FF',
+                            lavenderDeep: '#9333EA',
+                            mint: '#D1FAE5',
+                            mintDeep: '#059669',
+                            peach: '#FFEDD5',
+                            peachDeep: '#EA580C',
+                            blue: '#E0F2FE',
+                            blueDeep: '#0284C7',
+                            border: '#E2E8F0',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #1E293B;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 9999px;
+        }
+        /* Glass card effect */
+        .journal-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.08);
+            border-radius: 1.25rem;
+        }
+        /* Sheet animation */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bottom-sheet.hidden-sheet {
+            transform: translateY(100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24 md:pb-12 text-slate-800">
+
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-30 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-slate-200/80 px-4 py-3 sm:px-6">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-100 border border-amber-200 flex items-center justify-center text-amber-700 shadow-sm">
+                    <i class="fa-solid me-0.5 fa-piggy-bank text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="serif-title font-bold text-lg text-slate-900 leading-tight">15M Savings Tracker</h1>
+                    <p class="text-xs text-slate-500 font-medium">8 Bulan Main + 5 Bulan Masa Tenggang</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="openModal('quickAddModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5 active:scale-95">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Setor</span>
+                </button>
+                <button onclick="openModal('settingsModal')" class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition" title="Pengaturan & Cadangan">
+                    <i class="fa-solid fa-gear text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- Local Storage Info Banner -->
+        <div class="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3.5 flex items-start gap-3 text-xs text-amber-900">
+            <i class="fa-solid fa-circle-info text-amber-600 text-base mt-0.5 shrink-0"></i>
+            <div class="flex-1">
+                <span class="font-semibold">Penyimpanan Lokal:</span> Saldo diawali dari <span class="font-bold text-slate-900">Rp0</span>. Target utama 8 Bulan (25 Okt '26 - 25 Jun '27) dengan batas akhir masa tenggang 5 Bulan hingga <span class="font-bold text-slate-900">25 Nov '27</span>.
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-amber-500 hover:text-amber-800 p-0.5">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- DASHBOARD HERO CARD -->
+        <div class="journal-card p-5 sm:p-7 relative overflow-hidden bg-gradient-to-br from-white via-amber-50/20 to-emerald-50/30">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-medium">
+                            <i class="fa-regular fa-calendar-check text-slate-500"></i>
+                            25 Okt '26 – 25 Jun '27 (8 Bln Utama)
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-[11px] font-semibold border border-purple-200">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            +5 Bln Tenggang
+                        </span>
+                    </div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Tabungan Terkumpul</p>
+                    <div class="flex items-baseline gap-2">
+                        <span id="currentBalance" class="serif-title text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900">Rp0</span>
+                        <span class="text-xs text-slate-500 font-medium">/ Rp15.000.000</span>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Grid -->
+                <div class="grid grid-cols-2 gap-3 sm:gap-4 md:w-80 shrink-0">
+                    <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
+                        <p class="text-[11px] text-slate-500 font-medium">Sisa Target</p>
+                        <p id="remainingAmount" class="font-semibold text-slate-800 text-sm sm:text-base mt-0.5">Rp15.000.000</p>
+                    </div>
+                    <div class="bg-slate-50/80 p-3 rounded-xl border border-slate-100">
+                        <p class="text-[11px] text-slate-500 font-medium">Sisa Waktu Tenggang</p>
+                        <p id="daysRemaining" class="font-semibold text-purple-900 text-sm sm:text-base mt-0.5">0 Hari</p>
+                    </div>
+                    <div class="bg-emerald-50/60 p-3 rounded-xl border border-emerald-100">
+                        <p class="text-[11px] text-emerald-700 font-medium">Total Setoran</p>
+                        <p id="totalDeposits" class="font-semibold text-emerald-800 text-sm sm:text-base mt-0.5">Rp0</p>
+                    </div>
+                    <div class="bg-rose-50/60 p-3 rounded-xl border border-rose-100">
+                        <p class="text-[11px] text-rose-700 font-medium">Total Penarikan</p>
+                        <p id="totalWithdrawals" class="font-semibold text-rose-800 text-sm sm:text-base mt-0.5">Rp0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar Section -->
+            <div class="mt-6 space-y-2">
+                <div class="flex justify-between items-center text-xs">
+                    <span class="font-semibold text-slate-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-line text-emerald-600"></i>
+                        Progres Tabungan (Target Rp15M)
+                    </span>
+                    <span id="progressPercentage" class="font-bold text-emerald-700">0%</span>
+                </div>
+                <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/80">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-600 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION TABS -->
+        <div class="flex bg-slate-200/60 p-1 rounded-2xl gap-1 text-xs font-semibold text-slate-600">
+            <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="tab-btn flex-1 py-2.5 rounded-xl transition text-center shadow-sm bg-white text-slate-900">
+                <i class="fa-regular fa-calendar-days mr-1.5"></i>Kalender
+            </button>
+            <button onclick="switchTab('monthly')" id="tabBtn-monthly" class="tab-btn flex-1 py-2.5 rounded-xl transition text-center hover:text-slate-900">
+                <i class="fa-solid fa-chart-pie mr-1.5"></i>Bulanan
+            </button>
+            <button onclick="switchTab('milestones')" id="tabBtn-milestones" class="tab-btn flex-1 py-2.5 rounded-xl transition text-center hover:text-slate-900">
+                <i class="fa-solid fa-award mr-1.5"></i>Pencapaian
+            </button>
+            <button onclick="switchTab('history')" id="tabBtn-history" class="tab-btn flex-1 py-2.5 rounded-xl transition text-center hover:text-slate-900">
+                <i class="fa-solid fa-list-check mr-1.5"></i>Riwayat
+            </button>
+        </div>
+
+        <!-- TAB CONTENT 1: INTERACTIVE CALENDAR -->
+        <div id="tabView-calendar" class="tab-content space-y-4">
+            <div class="journal-card p-4 sm:p-6">
+                <!-- Calendar Header & Navigation -->
+                <div class="flex items-center justify-between mb-4">
+                    <button onclick="changeMonth(-1)" id="prevMonthBtn" class="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition active:scale-95">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="text-center">
+                        <h2 id="currentMonthYear" class="serif-title font-bold text-lg sm:text-xl text-slate-900">Okt 2026</h2>
+                        <p id="monthPhaseBadge" class="text-[11px] text-slate-500 font-medium">Periode Utama (25 Okt '26 - 25 Jun '27)</p>
+                    </div>
+                    <button onclick="changeMonth(1)" id="nextMonthBtn" class="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition active:scale-95">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Days Header (Monday First) -->
+                <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                    <span class="text-xs font-semibold text-slate-400 py-1">Sen</span>
+                    <span class="text-xs font-semibold text-slate-400 py-1">Sel</span>
+                    <span class="text-xs font-semibold text-slate-400 py-1">Rab</span>
+                    <span class="text-xs font-semibold text-slate-400 py-1">Kam</span>
+                    <span class="text-xs font-semibold text-slate-400 py-1">Jum</span>
+                    <span class="text-xs font-semibold text-slate-400 py-1">Sab</span>
+                    <span class="text-xs font-semibold text-rose-400 py-1">Min</span>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2"></div>
+
+                <!-- Calendar Legend -->
+                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs text-slate-500">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-amber-400 ring-2 ring-amber-100"></span>
+                        <span>Mulai (25 Okt)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <span>Target 8 Bln (25 Jun)</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                        <span>Batas Tenggang (25 Nov)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Checklist Card -->
+            <div class="journal-card p-4 sm:p-5 bg-gradient-to-r from-emerald-50/40 via-white to-sky-50/40">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-emerald-600"></i>
+                        Checklist Kebiasaan Hari Ini
+                    </h3>
+                    <span id="checklistDate" class="text-xs text-slate-500">25 Okt 2026</span>
+                </div>
+                <div class="space-y-2 text-xs" id="checklistContainer">
+                    <label class="flex items-center gap-2.5 p-2 rounded-xl bg-white/80 border border-slate-200/80 cursor-pointer hover:bg-white transition">
+                        <input type="checkbox" id="chk1" onchange="toggleChecklist(1)" class="w-4 h-4 accent-emerald-600 rounded">
+                        <span class="text-slate-700">Menyisihkan uang receh / sisa kembalian</span>
+                    </label>
+                    <label class="flex items-center gap-2.5 p-2 rounded-xl bg-white/80 border border-slate-200/80 cursor-pointer hover:bg-white transition">
+                        <input type="checkbox" id="chk2" onchange="toggleChecklist(2)" class="w-4 h-4 accent-emerald-600 rounded">
+                        <span class="text-slate-700">Hindari pengeluaran non-esensial hari ini</span>
+                    </label>
+                    <label class="flex items-center gap-2.5 p-2 rounded-xl bg-white/80 border border-slate-200/80 cursor-pointer hover:bg-white transition">
+                        <input type="checkbox" id="chk3" onchange="toggleChecklist(3)" class="w-4 h-4 accent-emerald-600 rounded">
+                        <span class="text-slate-700">Catat semua transaksi uang masuk & keluar</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 2: MONTHLY TRACKING -->
+        <div id="tabView-monthly" class="tab-content hidden space-y-4">
+            <div class="journal-card p-5">
+                <h2 class="serif-title font-bold text-lg text-slate-900 mb-1">Rincian Tabungan Bulanan</h2>
+                <p class="text-xs text-slate-500 mb-4">
+                    Target total <span class="font-semibold text-slate-700">Rp15.000.000</span> dimulai dari Rp0. Rata-rata target harian/bulanan dihitung berdasarkan skema 8 bulan utama dan 5 bulan tenggang.
+                </p>
+
+                <div id="monthlyListContainer" class="space-y-3"></div>
+            </div>
+
+            <!-- Monthly Note Card -->
+            <div class="journal-card p-5 space-y-3">
+                <h3 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                    <i class="fa-regular fa-note-sticky text-amber-600"></i>
+                    Catatan Refleksi Keuangan Bulan Ini
+                </h3>
+                <textarea id="monthlyNotesArea" onchange="saveMonthlyNote()" placeholder="Tuliskan evaluasi, hambatan, atau strategi hematmu untuk bulan ini..." class="w-full text-xs p-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/30 min-h-[90px] resize-none"></textarea>
+                <div class="flex justify-end">
+                    <button onclick="saveMonthlyNote()" class="text-xs font-semibold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition">
+                        Simpan Catatan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 3: MILESTONES -->
+        <div id="tabView-milestones" class="tab-content hidden space-y-4">
+            <div class="journal-card p-5">
+                <h2 class="serif-title font-bold text-lg text-slate-900 mb-1">Pencapaian & Milestone</h2>
+                <p class="text-xs text-slate-500 mb-5">
+                    Setiap langkah kecil membawamu lebih dekat ke target Rp15.000.000.
+                </p>
+
+                <div id="milestonesGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 4: HISTORY & SEARCH -->
+        <div id="tabView-history" class="tab-content hidden space-y-4">
+            <div class="journal-card p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <h2 class="serif-title font-bold text-lg text-slate-900">Riwayat Transaksi</h2>
+                    
+                    <div class="flex items-center gap-2">
+                        <!-- Search Box -->
+                        <div class="relative flex-1 sm:w-48">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                            <input type="text" id="searchInput" oninput="renderHistory()" placeholder="Cari..." class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30">
+                        </div>
+                        <!-- Filter Type -->
+                        <select id="typeFilter" onchange="renderHistory()" class="text-xs py-2 px-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 focus:outline-none">
+                            <option value="all">Semua</option>
+                            <option value="deposit">Setoran</option>
+                            <option value="withdrawal">Penarikan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="historyList" class="space-y-2.5 max-h-[500px] overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL / BOTTOM SHEET: DATE DETAIL & ADD TRANSACTION -->
+    <div id="dateModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bottom-sheet hidden-sheet bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl p-5 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">Transaksi Tanggal</p>
+                    <h3 id="modalDateTitle" class="serif-title font-bold text-lg text-slate-900">25 Oktober 2026</h3>
+                </div>
+                <button onclick="closeModal('dateModal')" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Date Total Summary -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center text-xs">
+                <span class="text-slate-500">Total Hari Ini:</span>
+                <span id="modalDateTotal" class="font-bold text-emerald-700 text-sm">Rp0</span>
+            </div>
+
+            <!-- Existing Transactions for selected date -->
+            <div class="space-y-2">
+                <p class="text-xs font-semibold text-slate-600">Catatan Hari Ini:</p>
+                <div id="modalTxList" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+            </div>
+
+            <hr class="border-slate-100">
+
+            <!-- Transaction Form -->
+            <form id="txForm" onsubmit="handleFormSubmit(event)" class="space-y-3">
+                <input type="hidden" id="txDateInput">
+                <input type="hidden" id="editingTxId">
+
+                <!-- Type Selector -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+                    <button type="button" id="btnTypeDeposit" onclick="setTxType('deposit')" class="py-2 rounded-lg bg-white text-emerald-700 shadow-sm transition">
+                        + Setoran
+                    </button>
+                    <button type="button" id="btnTypeWithdrawal" onclick="setTxType('withdrawal')" class="py-2 rounded-lg text-slate-600 hover:text-rose-700 transition">
+                        - Penarikan
+                    </button>
+                </div>
+                <input type="hidden" id="txTypeInput" value="deposit">
+
+                <!-- Amount Input -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Nominal (Rp)</label>
+                    <input type="number" id="txAmountInput" min="1" required placeholder="Contoh: 25000" class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 font-semibold">
+                </div>
+
+                <!-- Quick Amount Buttons -->
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="setQuickAmount(5000)" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 px-2.5 py-1.5 rounded-lg font-medium transition">+5rb</button>
+                    <button type="button" onclick="setQuickAmount(10000)" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 px-2.5 py-1.5 rounded-lg font-medium transition">+10rb</button>
+                    <button type="button" onclick="setQuickAmount(25000)" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 px-2.5 py-1.5 rounded-lg font-medium transition">+25rb</button>
+                    <button type="button" onclick="setQuickAmount(50000)" class="text-xs bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 px-2.5 py-1.5 rounded-lg font-medium transition">+50rb</button>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan (Opsional)</label>
+                    <input type="text" id="txDescInput" placeholder="Misal: Tabungan sisa jajan" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitTxBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-xs transition shadow-sm active:scale-95">
+                    + Tambah Deposit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QUICK ADD MODAL (Today's Deposit) -->
+    <div id="quickAddModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h3 class="serif-title font-bold text-base text-slate-900">Setor Cepat Hari Ini</h3>
+                <button onclick="closeModal('quickAddModal')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="handleQuickAdd(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nominal Setoran (Rp)</label>
+                    <input type="number" id="quickAmountInput" min="1" required placeholder="25000" class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 font-semibold">
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="setQuickAddValue(10000)" class="text-xs bg-slate-100 hover:bg-emerald-50 border border-slate-200 px-2.5 py-1.5 rounded-lg">+10rb</button>
+                    <button type="button" onclick="setQuickAddValue(25000)" class="text-xs bg-slate-100 hover:bg-emerald-50 border border-slate-200 px-2.5 py-1.5 rounded-lg">+25rb</button>
+                    <button type="button" onclick="setQuickAddValue(50000)" class="text-xs bg-slate-100 hover:bg-emerald-50 border border-slate-200 px-2.5 py-1.5 rounded-lg">+50rb</button>
+                    <button type="button" onclick="setQuickAddValue(100000)" class="text-xs bg-slate-100 hover:bg-emerald-50 border border-slate-200 px-2.5 py-1.5 rounded-lg">+100rb</button>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan</label>
+                    <input type="text" id="quickDescInput" placeholder="Setoran harian" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/30">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">
+                    Simpan Setoran
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SETTINGS & BACKUP MODAL -->
+    <div id="settingsModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h3 class="serif-title font-bold text-base text-slate-900">Pengaturan & Backup Data</h3>
+                <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <!-- Backup & Restore Section -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2">
+                    <h4 class="font-semibold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-file-export text-emerald-600"></i>
+                        Cadangan Data (JSON)
+                    </h4>
+                    <p class="text-slate-500">Ekspor data tabunganmu ke file JSON untuk dicadangkan atau dipindahkan ke HP lain.</p>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="exportJSON()" class="flex-1 bg-white border border-slate-200 hover:bg-slate-100 font-semibold py-2 rounded-lg text-slate-700 transition">
+                            <i class="fa-solid fa-download mr-1"></i> Unduh JSON
+                        </button>
+                        <button onclick="document.getElementById('importFileInput').click()" class="flex-1 bg-white border border-slate-200 hover:bg-slate-100 font-semibold py-2 rounded-lg text-slate-700 transition">
+                            <i class="fa-solid fa-upload mr-1"></i> Impor JSON
+                        </button>
+                        <input type="file" id="importFileInput" accept=".json" onchange="importJSON(event)" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Export CSV Section -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2">
+                    <h4 class="font-semibold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-file-csv text-sky-600"></i>
+                        Ekspor Laporan (CSV)
+                    </h4>
+                    <p class="text-slate-500">Unduh riwayat transaksi lengkap dalam format CSV untuk dibuka di Excel atau Google Sheets.</p>
+                    <button onclick="exportCSV()" class="w-full bg-white border border-slate-200 hover:bg-slate-100 font-semibold py-2 rounded-lg text-slate-700 transition">
+                        <i class="fa-solid fa-file-excel mr-1 text-emerald-600"></i> Unduh Laporan CSV
+                    </button>
+                </div>
+
+                <!-- Reset Data -->
+                <div class="bg-rose-50/50 p-3.5 rounded-xl border border-rose-100 space-y-2">
+                    <h4 class="font-semibold text-rose-800 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                        Reset Semua Data
+                    </h4>
+                    <p class="text-rose-600/80">Menghapus semua riwayat transaksi dan mengembalikan saldo ke Rp0.</p>
+                    <button onclick="confirmResetData()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2 rounded-lg transition">
+                        Reset Data Tabungan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 left-5 sm:left-auto sm:w-80 z-50 hidden bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transition-all">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toastMessage">Pesan notifikasi</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. CONSTANTS & INITIAL STATE
+           ========================================================================== */
+        const GOAL_AMOUNT = 15000000;
+        const INITIAL_BALANCE = 0; // Updated: Start from Rp0
+        const START_DATE_STR = "2026-10-25";
+        const MAIN_DEADLINE_STR = "2027-06-25";
+        const GRACE_DEADLINE_STR = "2027-11-25"; // Extended +5 Months
+        const STORAGE_KEY = "savings_tracker_15m_v2";
+
+        const MILESTONE_TARGETS = [
+            100000, 500000, 1000000, 3000000, 5000000, 7500000, 10000000, 12500000, 15000000
+        ];
+
+        // 8 Main Months + 5 Grace Months = 13 Calendar Months Total
+        const MONTH_CYCLES = [
+            { key: "2026-10", label: "Oktober 2026", year: 2026, month: 9, isGrace: false },
+            { key: "2026-11", label: "November 2026", year: 2026, month: 10, isGrace: false },
+            { key: "2026-12", label: "Desember 2026", year: 2026, month: 11, isGrace: false },
+            { key: "2027-01", label: "Januari 2027", year: 2027, month: 0, isGrace: false },
+            { key: "2027-02", label: "Februari 2027", year: 2027, month: 1, isGrace: false },
+            { key: "2027-03", label: "Maret 2027", year: 2027, month: 2, isGrace: false },
+            { key: "2027-04", label: "April 2027", year: 2027, month: 3, isGrace: false },
+            { key: "2027-05", label: "Mei 2027", year: 2027, month: 4, isGrace: false },
+            { key: "2027-06", label: "Juni 2027", year: 2027, month: 5, isGrace: false }, // Main Deadline: Jun 25
+            // Grace Period Months (+5 Months)
+            { key: "2027-07", label: "Juli 2027", year: 2027, month: 6, isGrace: true },
+            { key: "2027-08", label: "Agustus 2027", year: 2027, month: 7, isGrace: true },
+            { key: "2027-09", label: "September 2027", year: 2027, month: 8, isGrace: true },
+            { key: "2027-10", label: "Oktober 2027", year: 2027, month: 9, isGrace: true },
+            { key: "2027-11", label: "November 2027", year: 2027, month: 10, isGrace: true }, // Grace Deadline: Nov 25
+        ];
+
+        // Global State
+        let appData = {
+            transactions: [],
+            checklists: {}, // format: "YYYY-MM-DD": [true, false, true]
+            monthlyNotes: {} // format: "YYYY-MM": "Catatan..."
+        };
+
+        let currentCalendarMonthIndex = 0; // Starts at October 2026
+
+        /* ==========================================================================
+           2. INITIALIZATION & DATA PERSISTENCE
+           ========================================================================== */
+        window.onload = function() {
+            loadDataFromStorage();
+            
+            // Set initial calendar to current month if within cycle, else default to Oct 2026
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const foundIdx = MONTH_CYCLES.findIndex(m => m.year === year && m.month === month);
+            if (foundIdx !== -1) {
+                currentCalendarMonthIndex = foundIdx;
+            } else {
+                currentCalendarMonthIndex = 0; // Oct 2026 default
+            }
+
+            refreshUI();
+        };
+
+        function loadDataFromStorage() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("savings_tracker_15m_data_v1");
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    appData = {
+                        transactions: parsed.transactions || [],
+                        checklists: parsed.checklists || {},
+                        monthlyNotes: parsed.monthlyNotes || {}
+                    };
+                }
+            } catch (e) {
+                console.error("Gagal memuat data dari LocalStorage", e);
+                showToast("Gagal memuat data lokal tersimpan", "error");
+            }
+        }
+
+        function saveDataToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error("Gagal menyimpan data ke LocalStorage", e);
+                showToast("Penyimpanan lokal penuh!", "error");
+            }
+        }
+
+        /* ==========================================================================
+           3. CALCULATIONS & STATS
+           ========================================================================== */
+        function calculateStats() {
+            let totalDeposits = 0;
+            let totalWithdrawals = 0;
+
+            appData.transactions.forEach(tx => {
+                if (tx.type === 'deposit') {
+                    totalDeposits += Number(tx.amount);
+                } else if (tx.type === 'withdrawal') {
+                    totalWithdrawals += Number(tx.amount);
+                }
+            });
+
+            const currentBalance = INITIAL_BALANCE + totalDeposits - totalWithdrawals;
+            const remainingAmount = Math.max(0, GOAL_AMOUNT - currentBalance);
+            const progressPercentage = (currentBalance / GOAL_AMOUNT) * 100;
+
+            // Days remaining calculation relative to June 25, 2027 / Nov 25, 2027
+            const today = new Date();
+            const targetDate = new Date("2027-11-25T23:59:59"); // Grace period end
+            const diffTime = targetDate - today;
+            const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+            return {
+                currentBalance,
+                totalDeposits,
+                totalWithdrawals,
+                remainingAmount,
+                progressPercentage,
+                daysRemaining
+            };
+        }
+
+        /* ==========================================================================
+           4. MAIN UI REFRESH
+           ========================================================================== */
+        function refreshUI() {
+            const stats = calculateStats();
+
+            // Update Header Stats & Cards
+            document.getElementById('currentBalance').innerText = formatRupiah(stats.currentBalance);
+            document.getElementById('remainingAmount').innerText = formatRupiah(stats.remainingAmount);
+            document.getElementById('totalDeposits').innerText = formatRupiah(stats.totalDeposits);
+            document.getElementById('totalWithdrawals').innerText = formatRupiah(stats.totalWithdrawals);
+            document.getElementById('daysRemaining').innerText = stats.daysRemaining + " Hari";
+
+            // Progress Bar
+            const clampedPct = Math.min(100, Math.max(0, stats.progressPercentage));
+            document.getElementById('progressBar').style.width = clampedPct.toFixed(1) + '%';
+            document.getElementById('progressPercentage').innerText = stats.progressPercentage.toFixed(1) + '%';
+
+            // Render Active Tab Content
+            renderCalendar();
+            renderMonthlyTracking();
+            renderMilestones(stats.currentBalance);
+            renderHistory();
+            renderChecklist();
+        }
+
+        /* ==========================================================================
+           5. CALENDAR RENDERER (Monday-First)
+           ========================================================================== */
+        function renderCalendar() {
+            const monthInfo = MONTH_CYCLES[currentCalendarMonthIndex];
+            document.getElementById('currentMonthYear').innerText = monthInfo.label;
+
+            const badgeEl = document.getElementById('monthPhaseBadge');
+            if (monthInfo.isGrace) {
+                badgeEl.innerText = "Masa Tenggang (+5 Bulan)";
+                badgeEl.className = "text-[11px] text-purple-700 font-semibold";
+            } else {
+                badgeEl.innerText = "Periode Utama (25 Okt '26 - 25 Jun '27)";
+                badgeEl.className = "text-[11px] text-slate-500 font-medium";
+            }
+
+            // Toggle Nav Buttons
+            document.getElementById('prevMonthBtn').disabled = currentCalendarMonthIndex === 0;
+            document.getElementById('prevMonthBtn').style.opacity = currentCalendarMonthIndex === 0 ? "0.4" : "1";
+            document.getElementById('nextMonthBtn').disabled = currentCalendarMonthIndex === MONTH_CYCLES.length - 1;
+            document.getElementById('nextMonthBtn').style.opacity = currentCalendarMonthIndex === MONTH_CYCLES.length - 1 ? "0.4" : "1";
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            const year = monthInfo.year;
+            const month = monthInfo.month;
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+            const totalDays = lastDayOfMonth.getDate();
+
+            // Calculate starting day (Monday = 0, Sunday = 6)
+            let startDayIdx = firstDayOfMonth.getDay() - 1;
+            if (startDayIdx === -1) startDayIdx = 6; // Sunday becomes last
+
+            // Empty slots for alignment
+            for (let i = 0; i < startDayIdx; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "h-14 rounded-xl bg-slate-50/40 border border-transparent";
+                grid.appendChild(emptyCell);
+            }
+
+            // Map transactions per date
+            const dateTxMap = {};
+            appData.transactions.forEach(tx => {
+                if (!dateTxMap[tx.date]) dateTxMap[tx.date] = 0;
+                if (tx.type === 'deposit') dateTxMap[tx.date] += Number(tx.amount);
+                if (tx.type === 'withdrawal') dateTxMap[tx.date] -= Number(tx.amount);
+            });
+
+            // Days cells
+            for (let day = 1; day <= totalDays; day++) {
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const cell = document.createElement('div');
+
+                const isStart = (dateString === START_DATE_STR);
+                const isMainDeadline = (dateString === MAIN_DEADLINE_STR);
+                const isGraceDeadline = (dateString === GRACE_DEADLINE_STR);
+                const isWithinRange = (dateString >= START_DATE_STR && dateString <= GRACE_DEADLINE_STR);
+                const dayBalance = dateTxMap[dateString] || 0;
+
+                let borderStyle = "border-slate-200/80 bg-white";
+                let textStyle = "text-slate-700";
+
+                if (isStart) {
+                    borderStyle = "border-amber-400 bg-amber-50/60 ring-2 ring-amber-200";
+                    textStyle = "font-bold text-amber-900";
+                } else if (isMainDeadline) {
+                    borderStyle = "border-emerald-400 bg-emerald-50/60 ring-2 ring-emerald-200";
+                    textStyle = "font-bold text-emerald-900";
+                } else if (isGraceDeadline) {
+                    borderStyle = "border-purple-400 bg-purple-50/60 ring-2 ring-purple-200";
+                    textStyle = "font-bold text-purple-900";
+                } else if (!isWithinRange) {
+                    borderStyle = "border-dashed border-slate-200 bg-slate-50/60 opacity-60";
+                    textStyle = "text-slate-400";
+                }
+
+                cell.className = `h-14 sm:h-16 p-1.5 rounded-xl border ${borderStyle} flex flex-col justify-between cursor-pointer transition hover:border-emerald-400 hover:shadow-md active:scale-95 relative overflow-hidden`;
+                cell.onclick = () => openDateModal(dateString);
+
+                // Date Number Header
+                let badgeMarkup = "";
+                if (isStart) badgeMarkup = `<span class="text-[8px] bg-amber-200 text-amber-800 font-bold px-1 rounded">Mulai</span>`;
+                if (isMainDeadline) badgeMarkup = `<span class="text-[8px] bg-emerald-200 text-emerald-800 font-bold px-1 rounded">Target 8M</span>`;
+                if (isGraceDeadline) badgeMarkup = `<span class="text-[8px] bg-purple-200 text-purple-800 font-bold px-1 rounded">Tenggang</span>`;
+
+                cell.innerHTML = `
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-xs font-semibold ${textStyle}">${day}</span>
+                        ${badgeMarkup}
+                    </div>
+                `;
+
+                // Display saved amount indicator
+                if (dayBalance !== 0) {
+                    const isPositive = dayBalance > 0;
+                    const amountBadge = document.createElement('div');
+                    amountBadge.className = `text-[10px] font-bold px-1 py-0.5 rounded truncate w-full text-center ${isPositive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
+                    amountBadge.innerText = (isPositive ? '+' : '') + formatCompactNumber(dayBalance);
+                    cell.appendChild(amountBadge);
+                } else {
+                    const emptyDot = document.createElement('div');
+                    emptyDot.className = "w-1 h-1 rounded-full bg-slate-200 self-center mb-1";
+                    cell.appendChild(emptyDot);
+                }
+
+                grid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentCalendarMonthIndex += delta;
+            currentCalendarMonthIndex = Math.max(0, Math.min(MONTH_CYCLES.length - 1, currentCalendarMonthIndex));
+            renderCalendar();
+        }
+
+        /* ==========================================================================
+           6. MONTHLY TRACKING TAB
+           ========================================================================== */
+        function renderMonthlyTracking() {
+            const container = document.getElementById('monthlyListContainer');
+            container.innerHTML = '';
+
+            const mainMonthlyTarget = GOAL_AMOUNT / 8; // Rp1.875.000 / bulan untuk 8 bulan utama
+            const graceMonthlyTarget = GOAL_AMOUNT / 13; // Rp1.153.846 / bulan jika dibagi 13 bulan
+
+            MONTH_CYCLES.forEach((cycle, index) => {
+                // Calculate total savings in this month
+                const txInMonth = appData.transactions.filter(tx => tx.date.startsWith(cycle.key));
+                let monthTotal = 0;
+                txInMonth.forEach(tx => {
+                    if (tx.type === 'deposit') monthTotal += Number(tx.amount);
+                    if (tx.type === 'withdrawal') monthTotal -= Number(tx.amount);
+                });
+
+                // Target logic based on main vs grace period
+                let target = cycle.isGrace ? graceMonthlyTarget : mainMonthlyTarget;
+                if (cycle.key === "2026-10") {
+                    target = (mainMonthlyTarget / 30) * 7; // Oktober mulai tgl 25
+                } else if (cycle.key === "2027-06" && !cycle.isGrace) {
+                    target = (mainMonthlyTarget / 30) * 25; // Juni batas tgl 25
+                }
+
+                const diff = monthTotal - target;
+                const progressPct = Math.min(100, Math.max(0, (monthTotal / target) * 100));
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border ${cycle.isGrace ? 'border-purple-200 bg-purple-50/20' : 'border-slate-200/80 bg-white'} space-y-2`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-center text-xs">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-800 text-sm">${cycle.label}</span>
+                                ${cycle.isGrace ? '<span class="text-[10px] bg-purple-100 text-purple-800 font-semibold px-2 py-0.5 rounded-full">Tenggang</span>' : ''}
+                            </div>
+                            <span class="text-slate-400 text-[11px] block">Estimasi Target: ${formatRupiah(target)}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-slate-900 text-sm">${formatRupiah(monthTotal)}</span>
+                            <span class="text-[11px] block font-medium ${diff >= 0 ? 'text-emerald-600' : 'text-slate-400'}">
+                                ${diff >= 0 ? '+' + formatRupiah(diff) + ' dari estimasi' : formatRupiah(diff)}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full ${diff >= 0 ? 'bg-emerald-500' : (cycle.isGrace ? 'bg-purple-400' : 'bg-amber-400')} rounded-full transition-all duration-300" style="width: ${progressPct}%"></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Load monthly notes for active view month
+            const currentKey = MONTH_CYCLES[currentCalendarMonthIndex].key;
+            document.getElementById('monthlyNotesArea').value = appData.monthlyNotes[currentKey] || '';
+        }
+
+        function saveMonthlyNote() {
+            const currentKey = MONTH_CYCLES[currentCalendarMonthIndex].key;
+            const note = document.getElementById('monthlyNotesArea').value.trim();
+            appData.monthlyNotes[currentKey] = note;
+            saveDataToStorage();
+            showToast("Catatan bulanan berhasil disimpan");
+        }
+
+        /* ==========================================================================
+           7. MILESTONES TAB
+           ========================================================================== */
+        function renderMilestones(currentBalance) {
+            const grid = document.getElementById('milestonesGrid');
+            grid.innerHTML = '';
+
+            MILESTONE_TARGETS.forEach(target => {
+                const isUnlocked = currentBalance >= target;
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border transition ${isUnlocked ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200 opacity-60'} flex items-center gap-3`;
+                
+                card.innerHTML = `
+                    <div class="w-10 h-10 rounded-xl ${isUnlocked ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'} flex items-center justify-center text-base shrink-0 shadow-sm">
+                        <i class="fa-solid ${isUnlocked ? 'fa-circle-check' : 'fa-lock'}"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium">Target Milestone</p>
+                        <p class="font-bold text-sm ${isUnlocked ? 'text-emerald-950' : 'text-slate-700'}">${formatRupiah(target)}</p>
+                        <span class="text-[10px] ${isUnlocked ? 'text-emerald-700 font-semibold' : 'text-slate-400'}">
+                            ${isUnlocked ? 'Telah Tercapai! 🎉' : 'Belum Tercapai'}
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* ==========================================================================
+           8. TRANSACTION HISTORY & FILTER
+           ========================================================================== */
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+
+            let filtered = [...appData.transactions];
+
+            // Filter type
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(tx => tx.type === typeFilter);
+            }
+
+            // Search filter
+            if (search) {
+                filtered = filtered.filter(tx => 
+                    (tx.description && tx.description.toLowerCase().includes(search)) ||
+                    tx.amount.toString().includes(search) ||
+                    tx.date.includes(search)
+                );
+            }
+
+            // Sort newest timestamp first
+            filtered.sort((a, b) => b.timestamp - a.timestamp);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400 text-xs">
+                        <i class="fa-solid fa-receipt text-2xl mb-2 opacity-50"></i>
+                        <p>Belum ada catatan transaksi yang sesuai.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(tx => {
+                const isDeposit = tx.type === 'deposit';
+                const card = document.createElement('div');
+                card.className = "p-3 rounded-xl border border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs transition hover:bg-slate-100/80";
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg ${isDeposit ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} flex items-center justify-center font-bold">
+                            <i class="fa-solid ${isDeposit ? 'fa-arrow-down-left' : 'fa-arrow-up-right'}"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-800">${tx.description || (isDeposit ? 'Setoran Tabungan' : 'Penarikan Dana')}</p>
+                            <p class="text-[10px] text-slate-400">${formatDateIndo(tx.date)}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold ${isDeposit ? 'text-emerald-700' : 'text-rose-700'}">
+                            ${isDeposit ? '+' : '-'}${formatRupiah(tx.amount)}
+                        </span>
+                        <button onclick="editTransaction('${tx.id}')" class="text-slate-400 hover:text-slate-600 p-1">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteTransaction('${tx.id}')" class="text-slate-400 hover:text-rose-600 p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* ==========================================================================
+           9. CHECKLIST FEATURE
+           ========================================================================== */
+        function renderChecklist() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('checklistDate').innerText = formatDateIndo(todayStr);
+
+            const saved = appData.checklists[todayStr] || [false, false, false];
+            document.getElementById('chk1').checked = !!saved[0];
+            document.getElementById('chk2').checked = !!saved[1];
+            document.getElementById('chk3').checked = !!saved[2];
+        }
+
+        function toggleChecklist(index) {
+            const todayStr = new Date().toISOString().split('T')[0];
+            if (!appData.checklists[todayStr]) appData.checklists[todayStr] = [false, false, false];
+            
+            const isChecked = document.getElementById(`chk${index}`).checked;
+            appData.checklists[todayStr][index - 1] = isChecked;
+            saveDataToStorage();
+        }
+
+        /* ==========================================================================
+           10. TRANSACTION MODAL HANDLERS
+           ========================================================================== */
+        function openDateModal(dateString) {
+            document.getElementById('txDateInput').value = dateString;
+            document.getElementById('modalDateTitle').innerText = formatDateIndo(dateString);
+            document.getElementById('editingTxId').value = '';
+            document.getElementById('txAmountInput').value = '';
+            document.getElementById('txDescInput').value = '';
+            setTxType('deposit');
+
+            renderModalTxList(dateString);
+
+            // Open Modal with sheet animation
+            const modal = document.getElementById('dateModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('.bottom-sheet').classList.remove('hidden-sheet');
+            }, 10);
+        }
+
+        function renderModalTxList(dateString) {
+            const listContainer = document.getElementById('modalTxList');
+            const totalContainer = document.getElementById('modalDateTotal');
+
+            const dayTx = appData.transactions.filter(tx => tx.date === dateString);
+            let dayTotal = 0;
+
+            if (dayTx.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Belum ada transaksi di tanggal ini.</p>`;
+                totalContainer.innerText = "Rp0";
+                return;
+            }
+
+            listContainer.innerHTML = '';
+            dayTx.forEach(tx => {
+                const isDeposit = tx.type === 'deposit';
+                if (isDeposit) dayTotal += Number(tx.amount);
+                else dayTotal -= Number(tx.amount);
+
+                const item = document.createElement('div');
+                item.className = "flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs border border-slate-100";
+                item.innerHTML = `
+                    <div>
+                        <span class="font-semibold ${isDeposit ? 'text-emerald-700' : 'text-rose-700'}">
+                            ${isDeposit ? '+' : '-'}${formatRupiah(tx.amount)}
+                        </span>
+                        <span class="text-slate-500 ml-2">${tx.description || '-'}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="editTransaction('${tx.id}')" class="text-slate-400 hover:text-slate-700 px-1.5 py-0.5">
+                            <i class="fa-solid fa-pen text-[11px]"></i>
+                        </button>
+                        <button onclick="deleteTransaction('${tx.id}')" class="text-slate-400 hover:text-rose-600 px-1.5 py-0.5">
+                            <i class="fa-solid fa-trash text-[11px]"></i>
+                        </button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+
+            totalContainer.innerText = (dayTotal >= 0 ? '+' : '') + formatRupiah(dayTotal);
+        }
+
+        function setTxType(type) {
+            document.getElementById('txTypeInput').value = type;
+            const btnDep = document.getElementById('btnTypeDeposit');
+            const btnWith = document.getElementById('btnTypeWithdrawal');
+            const submitBtn = document.getElementById('submitTxBtn');
+
+            if (type === 'deposit') {
+                btnDep.className = "py-2 rounded-lg bg-white text-emerald-700 shadow-sm transition font-semibold";
+                btnWith.className = "py-2 rounded-lg text-slate-600 hover:text-rose-700 transition font-medium";
+                submitBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-xs transition shadow-sm active:scale-95";
+                submitBtn.innerText = "+ Tambah Deposit";
+            } else {
+                btnWith.className = "py-2 rounded-lg bg-white text-rose-700 shadow-sm transition font-semibold";
+                btnDep.className = "py-2 rounded-lg text-slate-600 hover:text-emerald-700 transition font-medium";
+                submitBtn.className = "w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl text-xs transition shadow-sm active:scale-95";
+                submitBtn.innerText = "- Simpan Penarikan";
+            }
+        }
+
+        function setQuickAmount(amt) {
+            const input = document.getElementById('txAmountInput');
+            const current = Number(input.value) || 0;
+            input.value = current + amt;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const date = document.getElementById('txDateInput').value;
+            const amount = Number(document.getElementById('txAmountInput').value);
+            const type = document.getElementById('txTypeInput').value;
+            const description = document.getElementById('txDescInput').value.trim();
+            const editingId = document.getElementById('editingTxId').value;
+
+            // Validations
+            if (!amount || amount <= 0) {
+                showToast("Masukkan nominal tabungan yang valid!", "error");
+                return;
+            }
+
+            const stats = calculateStats();
+            if (type === 'withdrawal') {
+                let availableBalance = stats.currentBalance;
+                if (editingId) {
+                    const oldTx = appData.transactions.find(t => t.id === editingId);
+                    if (oldTx && oldTx.type === 'withdrawal') availableBalance += Number(oldTx.amount);
+                    if (oldTx && oldTx.type === 'deposit') availableBalance -= Number(oldTx.amount);
+                }
+                if (amount > availableBalance) {
+                    showToast("Penarikan melebihi saldo tabungan saat ini!", "error");
+                    return;
+                }
+            }
+
+            if (editingId) {
+                // Update Existing Transaction
+                const idx = appData.transactions.findIndex(t => t.id === editingId);
+                if (idx !== -1) {
+                    appData.transactions[idx] = {
+                        ...appData.transactions[idx],
+                        amount,
+                        type,
+                        date,
+                        description
+                    };
+                }
+                showToast("Transaksi berhasil diperbarui!");
+            } else {
+                // Create New Transaction
+                const newTx = {
+                    id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                    amount,
+                    type,
+                    date,
+                    description,
+                    timestamp: Date.now()
+                };
+                appData.transactions.push(newTx);
+                showToast(type === 'deposit' ? "Setoran berhasil disimpan!" : "Penarikan berhasil dicatat!");
+            }
+
+            saveDataToStorage();
+            refreshUI();
+            closeModal('dateModal');
+        }
+
+        function editTransaction(txId) {
+            const tx = appData.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            openDateModal(tx.date);
+            document.getElementById('editingTxId').value = tx.id;
+            document.getElementById('txAmountInput').value = tx.amount;
+            document.getElementById('txDescInput').value = tx.description || '';
+            setTxType(tx.type);
+        }
+
+        function deleteTransaction(txId) {
+            if (!confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) return;
+
+            appData.transactions = appData.transactions.filter(t => t.id !== txId);
+            saveDataToStorage();
+            refreshUI();
+
+            const activeDate = document.getElementById('txDateInput').value;
+            if (activeDate) renderModalTxList(activeDate);
+            showToast("Transaksi dihapus.");
+        }
+
+        /* Quick Add Modal (Today's Deposit) */
+        function handleQuickAdd(e) {
+            e.preventDefault();
+            const amount = Number(document.getElementById('quickAmountInput').value);
+            const description = document.getElementById('quickDescInput').value.trim();
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            if (!amount || amount <= 0) {
+                showToast("Masukkan nominal valid", "error");
+                return;
+            }
+
+            appData.transactions.push({
+                id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                amount,
+                type: 'deposit',
+                date: todayStr,
+                description: description || 'Setoran Harian',
+                timestamp: Date.now()
+            });
+
+            saveDataToStorage();
+            refreshUI();
+            closeModal('quickAddModal');
+            showToast("Setoran cepat berhasil ditambahkan!");
+        }
+
+        function setQuickAddValue(val) {
+            document.getElementById('quickAmountInput').value = val;
+        }
+
+        /* ==========================================================================
+           11. BACKUP / RESTORE / EXPORT
+           ========================================================================== */
+        function exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Tabungan_15M_Backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("Backup JSON berhasil diunduh!");
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!confirm("Mengimpor data baru akan menggantikan data yang ada saat ini. Lanjutkan?")) {
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && Array.isArray(parsed.transactions)) {
+                        appData = {
+                            transactions: parsed.transactions,
+                            checklists: parsed.checklists || {},
+                            monthlyNotes: parsed.monthlyNotes || {}
+                        };
+                        saveDataToStorage();
+                        refreshUI();
+                        closeModal('settingsModal');
+                        showToast("Data tabungan berhasil dipulihkan!");
+                    } else {
+                        showToast("Format file JSON tidak valid!", "error");
+                    }
+                } catch (err) {
+                    showToast("Gagal membaca file JSON!", "error");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function exportCSV() {
+            if (appData.transactions.length === 0) {
+                showToast("Tidak ada transaksi untuk diekspor!", "error");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Jenis,Nominal,Keterangan,Waktu_Dibuat\n";
+            appData.transactions.forEach(tx => {
+                const row = `"${tx.id}","${tx.date}","${tx.type}",${tx.amount},"${tx.description || ''}","${new Date(tx.timestamp).toLocaleString('id-ID')}"`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Laporan_Tabungan_15M_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            showToast("Laporan CSV berhasil diunduh!");
+        }
+
+        function confirmResetData() {
+            if (confirm("PERINGATAN: Apakah Anda yakin ingin menghapus SELURUH data transaksi? Saldo akan kembali ke Rp0.")) {
+                appData = { transactions: [], checklists: {}, monthlyNotes: {} };
+                saveDataToStorage();
+                refreshUI();
+                closeModal('settingsModal');
+                showToast("Seluruh data berhasil di-reset.");
+            }
+        }
+
+        /* ==========================================================================
+           12. UTILITY & HELPER FUNCTIONS
+           ========================================================================== */
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex-1 py-2.5 rounded-xl transition text-center hover:text-slate-900";
+            });
+
+            document.getElementById(`tabView-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tabBtn-${tabName}`);
+            activeBtn.className = "tab-btn flex-1 py-2.5 rounded-xl transition text-center shadow-sm bg-white text-slate-900 font-bold";
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const sheet = modal.querySelector('.bottom-sheet');
+            if (sheet) {
+                sheet.classList.add('hidden-sheet');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            }).format(number);
+        }
+
+        function formatCompactNumber(number) {
+            if (Math.abs(number) >= 1000000) {
+                return (number / 1000000).toFixed(1) + 'jt';
+            } else if (Math.abs(number) >= 1000) {
+                return (number / 1000).toFixed(0) + 'rb';
+            }
+            return number.toString();
+        }
+
+        function formatDateIndo(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            const date = new Date(parts[0], parts[1] - 1, parts[2]);
+            return new Intl.DateTimeFormat('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(date);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const msg = document.getElementById('toastMessage');
+
+            msg.innerText = message;
+            if (type === 'error') {
+                icon.className = "fa-solid fa-circle-xmark text-rose-400 text-base";
+            } else {
+                icon.className = "fa-solid fa-circle-check text-emerald-400 text-base";
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
